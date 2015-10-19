@@ -1,0 +1,8 @@
+<TopMenu>
+   <TopMenuGroup text="Record">
+      <TopMenuCommand name="query" text="Query" />
+      <TopMenuCommand name="add" text="Add" />
+      <TopMenuCommand name="update" text="Update" />
+      <TopMenuCommand name="remove" text="Remove" />
+   </TopMenuGroup>
+</TopMenu>
