@@ -213,6 +213,9 @@ DEFINE i,j, size, len INTEGER
          ON ACTION displayentirearraywithheadingstowindow
             CALL copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),TRUE)
             CALL display_clipboard_to_window()
+
+         ON ACTION selectiontostring
+            CALL selection_to_string(DIALOG,"arrcopy")
       END DISPLAY
       
       -- Fields to enter values and have the style changed based on the value
