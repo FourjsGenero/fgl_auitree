@@ -200,6 +200,21 @@ Note what happens when you enter 1212 slowly into each field.
 END
 END
 
+
+
+PAGE commentplaceholder (TEXT="Placeholder/Comment manipulation")
+GRID
+{
+Edit     [cp01       ]
+
+IN this example, change placeholder and comment on the fly
+}
+END
+END
+
+
+
+
 PAGE topmenubuilder (TEXT="Top Menu Builder")
 GRID
 {
@@ -251,6 +266,9 @@ EDIT ac08 = formonly.aclastuseddatetime, TITLE="Last Used Datetime", SCROLL;
 EDIT s01 = formonly.sfield01, NOT NULL, STYLE="mandatory";
 EDIT s02 = formonly.sfield02, NOT NULL, STYLE="mandatory";
 EDIT s03 = formonly.sfield03;
+
+EDIT cp01 = formonly.cpfield01;
+
 
 BUTTON bats01: actiontextset1;
 BUTTON bats02: actiontextset2;

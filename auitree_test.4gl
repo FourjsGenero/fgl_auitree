@@ -54,6 +54,9 @@ DEFINE tdesc01, tdesc02 CHAR(30)
 
 DEFINE sfield01, sfield02, sfield03 INTEGER
 
+DEFINE cpfield01 STRING
+DEFINE comment_value, placeholder_value STRING
+
 DEFINE w ui.Window
 DEFINE f ui.Form
 DEFINE r om.DomNode
@@ -230,13 +233,33 @@ DEFINE i,j, size, len INTEGER
                WHEN "sfield03" CALL addremovestyle_process("sfield03", addremovestyle_valid(FGL_DIALOG_GETBUFFER()))  
             END CASE
       END INPUT
-      
+
+      INPUT BY NAME cpfield01 ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+        ON ACTION comment_set
+            PROMPT "Enter comment" For comment_value
+            CALL field_comment_set("cpfield01", comment_value)
+        ON ACTION placeholder_set
+            PROMPT "Enter placeholder" For placeholder_value
+            CALL field_placeholder_set("cpfield01", placeholder_value)
+        ON ACTION get
+            CALL FGL_WINMESSAGE("Info",SFMT("Comment=%1, Placeholder=%2", field_comment_get("cpfield01"), field_placeholder_get("cpfield01")),"info")
+      END INPUT
 
       -- Action Text Set
-      ON ACTION actiontextset1
+     
+      -- The button does not
+      ON ACTION actiontextset1 ATTRIBUTES(DEFAULTVIEW=YES)
+         -- Note how only the view in the action panel has its text set
          CALL action_text_set("actiontextset1", CURRENT HOUR TO SECOND)
-      ON ACTION actiontextset2
-         CALL action_text_set("actiontextset2", CURRENT HOUR TO SECOND)
+         CALL button_text_set("actiontextset1", CURRENT HOUR TO SECOND)
+         
+      ON ACTION actiontextset2 ATTRIBUTES(DEFAULTVIEW=NO)
+         -- Note how only the view in the action panel has its text set
+         CALL button_text_set("actiontextset2", CURRENT HOUR TO SECOND)
+
+         
+      ON ACTION actiontextset3 ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Set3")
+         CALL action_text_set("actiontextset3", CURRENT HOUR TO SECOND)
 
       
       ON ACTION close

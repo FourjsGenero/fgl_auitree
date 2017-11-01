@@ -125,10 +125,12 @@ FUNCTION action_comment_set(action, comment)
 DEFINE action, comment STRING
 DEFINE n om.DomNode
 
-   LET n = action_node_get(action)
-   IF n IS NOT NULL THEN
-      CALL n.setAttribute("comment", comment)
-   END IF
+    CALL ui.Dialog.getCurrent().setActionComment(action, comment)
+    -- Below code replaced by new setActionComment method
+    --LET n = action_node_get(action)
+    --IF n IS NOT NULL THEN
+         --CALL n.setAttribute("comment", comment)
+    --END IF
 END FUNCTION
 
 #+ action_text_set Change the text attribute of a given action
@@ -136,10 +138,12 @@ FUNCTION action_text_set(action, text)
 DEFINE action, text STRING
 DEFINE n om.DomNode
 
-   LET n = action_node_get(action)
-   IF n IS NOT NULL THEN
-      CALL n.setAttribute("text", text)
-   END IF
+    CALL ui.Dialog.getCurrent().setActionText(action, text)
+    -- Below code replaced by new setActionText method
+    --LET n = action_node_get(action)
+    --IF n IS NOT NULL THEN
+        --CALL n.setAttribute("text", text)
+    --END IF
 END FUNCTION
 
 
@@ -184,6 +188,68 @@ DEFINE n om.DomNode
       CALL n.setAttribute("width",width)
    END IF
 END FUNCTION
+
+
+
+#+ field_comment_set Set the comment attribute of a given field
+FUNCTION field_comment_set(name, comment)
+DEFINE name STRING
+DEFINE comment STRING
+DEFINE n om.DomNode
+
+   LET n = field_node_get(name, TRUE)
+   IF n IS NOT NULL THEN
+      CALL n.setAttribute("comment",comment)
+   END IF
+END FUNCTION
+
+
+
+#+ field_comment_get Get the hidden attribute of a given field
+FUNCTION field_comment_get(name)
+DEFINE name STRING
+DEFINE comment STRING
+DEFINE n om.DomNode
+
+   LET n = field_node_get(name, TRUE)
+   IF n IS NOT NULL THEN
+      LET comment = n.getAttribute("comment")
+   END IF
+   RETURN comment
+END FUNCTION
+
+
+
+
+#+ field_placeholdert_set Set the placeholder attribute of a given field
+FUNCTION field_placeholder_set(name, placeholder)
+DEFINE name STRING
+DEFINE placeholder STRING
+DEFINE n om.DomNode
+
+   LET n = field_node_get(name, TRUE)
+   IF n IS NOT NULL THEN
+      CALL n.setAttribute("placeholder",placeholder)
+   END IF
+END FUNCTION
+
+
+
+#+ field_placeholder_get Get the hidden attribute of a given field
+FUNCTION field_placeholder_get(name)
+DEFINE name STRING
+DEFINE placeholder STRING
+DEFINE n om.DomNode
+
+   LET n = field_node_get(name, TRUE)
+   IF n IS NOT NULL THEN
+      LET placeholder = n.getAttribute("placeholder")
+   END IF
+   RETURN placeholder
+END FUNCTION
+
+
+
 
 #+ field_style_add Add a style to a space delimited list of styles
 FUNCTION field_style_add(name, style)
@@ -243,12 +309,23 @@ END FUNCTION
 FUNCTION tablecolumn_title_set(name, title)
 DEFINE name, title STRING
 DEFINE n om.DomNode
- 
-   LET n = field_node_get(name, FALSE)
-   IF n IS NOT NULL THEN
 
-      CALL n.setAttribute("text",title)
-   END IF
+    CALL ui.Window.getCurrent().getForm().setElementText(name, title)
+    -- Below code replaced by setElementText method
+    --LET n = field_node_get(name, FALSE)
+    --IF n IS NOT NULL THEN
+        --CALL n.setAttribute("text",title)
+    --END IF
+END FUNCTION
+
+
+
+#+ button_text_set Set the title attribute of a given field
+FUNCTION button_text_set(name, value)
+DEFINE name, value STRING
+
+
+    CALL ui.Window.getCurrent().getForm().setElementText(name, value)
 END FUNCTION
 
 #+ field_hidden_get Get the hidden attribute of a given field
