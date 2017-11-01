@@ -34,11 +34,6 @@ IMPORT FGL auitree
 IMPORT FGL arraycopy
 
 
--- Data structure used to define the presentation of a generic menu.
-DEFINE gmdesign DYNAMIC ARRAY OF RECORD
-   name, text, comment STRING
-END RECORD
-
 DEFINE topmenugroup STRING
 DEFINE topmenuarray DYNAMIC ARRAY OF RECORD
    topmenucommand, topmenuaction STRING
@@ -82,20 +77,7 @@ DEFINE i,j, size, len INTEGER
    CLOSE WINDOW SCREEN
    
    CALL ui.Interface.LoadStyles("auitree_test.4st")
-   
-   -- Initial values
-   LET gmdesign[1].name = "print"
-   LET gmdesign[1].text = "Print"
-   LET gmdesign[1].comment = "Print file to printer"
-   
-   LET gmdesign[2].name = "email"
-   LET gmdesign[2].text = "Email"
-   LET gmdesign[2].comment = "Email file"
-   
-   LET gmdesign[3].name = "save"
-   LET gmdesign[3].text = "Save"
-   LET gmdesign[3].comment = "Save file to printer"
-   
+      
    LET svalue = 0
    
       -- populate random sized array with random data
@@ -200,12 +182,6 @@ DEFINE i,j, size, len INTEGER
             CALL auitree.field_tag_set("tfield02", "hidden", FALSE, 1)
       END INPUT
    
-      -- Input the criteria for the menu and then display it
-      INPUT ARRAY gmdesign  FROM scr.* ATTRIBUTES(WITHOUT DEFAULTS=TRUE, MAXCOUNT=20)
-         ON ACTION menu
-            CALL generic_menu()
-      END INPUT
-   
       -- Array from which we can test the copy entire array functionality
       DISPLAY ARRAY arrcopy TO arrcopy.*
          ON ACTION copyentirearraywithheadings
@@ -256,54 +232,6 @@ END MAIN
 
 
 
-FUNCTION generic_menu()
-DEFINE i INTEGER
-
-   MENU "Generic Menu" ATTRIBUTES(STYLE="dialog", IMAGE="exclamation", COMMENT="Select generic menu action")
-      BEFORE MENU
-         FOR i = 1 TO 20
-            IF i <= gmdesign.getLength() THEN
-               CALL DIALOG.setActionHidden(SFMT("action%1", i USING "&&"),FALSE)
-               CALL DIALOG.setActionText(SFMT("action%1", i USING "&&"),gmdesign[i].text)
-               CALL DIALOG.setActionComment(SFMT("action%1", i USING "&&"),gmdesign[i].comment)
-            ELSE
-               -- Hide those actions that haven't been defined
-               CALL DIALOG.setActionHidden(SFMT("action%1", i USING "&&"),TRUE)
-               CALL DIALOG.setActionText(SFMT("action%1", i USING "&&"),"")
-               CALL DIALOG.setActionComment(SFMT("action%1", i USING "&&"),"")
-            END IF
-         END FOR
-                       
-       -- Determine what action was selected
-&define menuline(p1) ON ACTION action ## p1 MESSAGE SFMT("%1 selected", gmdesign[p1].name)
-      menuline(01)
-      menuline(02)
-      menuline(03)
-      menuline(04)
-      menuline(05)
-      menuline(06)
-      menuline(07)
-      menuline(08)
-      menuline(09)
-      menuline(10)
-      menuline(11)
-      menuline(12)
-      menuline(13)
-      menuline(14)
-      menuline(15)
-      menuline(16)
-      menuline(17)
-      menuline(18)
-      menuline(19)
-      menuline(20)
-&undef menuline
-      ON ACTION close
-         EXIT MENU
-         
-            
-   END MENU 
-END FUNCTION
-
 FUNCTION addremovestyle_process(fieldname, valid)
 DEFINE fieldname STRING
 DEFINE valid SMALLINT
@@ -335,9 +263,3 @@ DEFINE value INTEGER
    END IF
    RETURN TRUE
 END FUNCTION
-
-
-
-
-
-
