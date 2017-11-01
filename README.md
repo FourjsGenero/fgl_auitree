@@ -32,14 +32,6 @@ Use the TAG attribute to group a fields title label and description label so tha
 <img alt="No fields hidden" src="https://user-images.githubusercontent.com/13615993/32255547-9be5df84-bf0d-11e7-81de-0a071d8dfe43.png" width="50%" />
 <img alt="Tagged fields hidden" src="https://user-images.githubusercontent.com/13615993/32255546-9b9cf5d0-bf0d-11e7-9feb-54f5b6487f6e.png" width="50%" />
 
-### Generic Menu
-
-Set the action text, comment dynamically.  Screenshot shows the definition and the generic dialog menu
-
-<img alt="Generic Menu" src="https://user-images.githubusercontent.com/13615993/32255545-9b1611dc-bf0d-11e7-8f5b-595862ed09ea.png" width="50%" />
-
-(intention is to port this off as a seperate example one day)
-
 ### Array Copy
 
 Techniques for copying an Entire Array
@@ -73,4 +65,3 @@ Add standard items to each TopMenu, in this case a File, Edit on the left and He
 ## TODO
 Port off arraycopy as a seperate example
 
-Port off generic_menu as a seperate example
