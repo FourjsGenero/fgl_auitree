@@ -30,6 +30,9 @@
 
 IMPORT util
 
+IMPORT FGL auitree
+IMPORT FGL arraycopy
+
 
 -- Data structure used to define the presentation of a generic menu.
 DEFINE gmdesign DYNAMIC ARRAY OF RECORD
@@ -123,9 +126,7 @@ DEFINE i,j, size, len INTEGER
    LET w = ui.Window.getCurrent()
    LET f= w.getForm()
    
-   CALL loadtopmenu_standard("auitree_test")
-   
-   
+   CALL auitree.loadtopmenu_standard("auitree_test")
    
    DIALOG ATTRIBUTES(UNBUFFERED)
       -- First folder page
@@ -137,48 +138,48 @@ DEFINE i,j, size, len INTEGER
       BEFORE INPUT
          
          ON ACTION toggle_vbx1
-            CALL f.setElementHidden("vbx1",1-field_hidden_get("vbx1"))
+            CALL f.setElementHidden("vbx1",1-auitree.field_hidden_get("vbx1"))
             
          ON ACTION toggle_hbx1
-            CALL f.setElementHidden("hbx1",1-field_hidden_get("hbx1"))
+            CALL f.setElementHidden("hbx1",1-auitree.field_hidden_get("hbx1"))
             
          ON ACTION toggle_hbx2
-            CALL f.setElementHidden("hbx2",1-field_hidden_get("hbx2"))
+            CALL f.setElementHidden("hbx2",1-auitree.field_hidden_get("hbx2"))
             
          ON ACTION toggle_grp11
-            CALL f.setElementHidden("grp11",1-field_hidden_get("grp11"))
+            CALL f.setElementHidden("grp11",1-auitree.field_hidden_get("grp11"))
             
          ON ACTION toggle_grp12
-            CALL f.setElementHidden("grp12",1-field_hidden_get("grp12"))
+            CALL f.setElementHidden("grp12",1-auitree.field_hidden_get("grp12"))
             
          ON ACTION toggle_grp21
-            CALL f.setElementHidden("grp21",1-field_hidden_get("grp21"))
+            CALL f.setElementHidden("grp21",1-auitree.field_hidden_get("grp21"))
             
          ON ACTION toggle_grp22
-            CALL f.setElementHidden("grp22",1-field_hidden_get("grp22"))
+            CALL f.setElementHidden("grp22",1-auitree.field_hidden_get("grp22"))
             
          ON ACTION toggle_grd11
-            CALL f.setElementHidden("grd11",1-field_hidden_get("grd11"))
+            CALL f.setElementHidden("grd11",1-auitree.field_hidden_get("grd11"))
             
          ON ACTION toggle_grd12
-            CALL f.setElementHidden("grd12",1-field_hidden_get("grd12"))
+            CALL f.setElementHidden("grd12",1-auitree.field_hidden_get("grd12"))
             
          ON ACTION toggle_grd21
-            CALL f.setElementHidden("grd21",1-field_hidden_get("grd21"))
+            CALL f.setElementHidden("grd21",1-auitree.field_hidden_get("grd21"))
            
          ON ACTION toggle_grd22
-            CALL f.setElementHidden("grd22",1-field_hidden_get("grd22"))
+            CALL f.setElementHidden("grd22",1-auitree.field_hidden_get("grd22"))
             
          
       END INPUT
       
       CONSTRUCT BY NAME where_clause ON constructfield
          ON ACTION dialogtype
-            MESSAGE dialogType_get()
+            MESSAGE auitree.dialogType_get()
       END CONSTRUCT
       INPUT inputfield FROM inputfield ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
          ON ACTION dialogtype
-            MESSAGE dialogType_get()
+            MESSAGE auitree.dialogType_get()
       END INPUT
       
       -- Use the tag attribute to show/hide more than one screen widget at a 
@@ -190,31 +191,31 @@ DEFINE i,j, size, len INTEGER
             LET tcode02 = "200"
             LET tdesc02 = "Two Hundred"
          ON ACTION show_field01
-            CALL field_tag_set("tfield01", "hidden", FALSE, 0)
+            CALL auitree.field_tag_set("tfield01", "hidden", FALSE, 0)
          ON ACTION hide_field01
-            CALL field_tag_set("tfield01", "hidden", FALSE, 1)
+            CALL auitree.field_tag_set("tfield01", "hidden", FALSE, 1)
          ON ACTION show_field02
-            CALL field_tag_set("tfield02", "hidden", FALSE, 0)
+            CALL auitree.field_tag_set("tfield02", "hidden", FALSE, 0)
          ON ACTION hide_field02
-            CALL field_tag_set("tfield02", "hidden", FALSE, 1)
+            CALL auitree.field_tag_set("tfield02", "hidden", FALSE, 1)
       END INPUT
    
       -- Input the criteria for the menu and then display it
       INPUT ARRAY gmdesign  FROM scr.* ATTRIBUTES(WITHOUT DEFAULTS=TRUE, MAXCOUNT=20)
          ON ACTION menu
-            CALL auitree_generic_menu()
+            CALL generic_menu()
       END INPUT
    
       -- Array from which we can test the copy entire array functionality
       DISPLAY ARRAY arrcopy TO arrcopy.*
          ON ACTION copyentirearraywithheadings
-            CALL copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),TRUE)
+            CALL arraycopy.copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),TRUE)
          
          ON ACTION copyentirearraywithoutheadings
-            CALL copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),FALSE)
+            CALL arraycopy.copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),FALSE)
 
          ON ACTION displayentirearraywithheadingstowindow
-            CALL copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),TRUE)
+            CALL arraycopy.copy_entire_array(base.TypeInfo.create(arrcopy), d.getelementbyid(r.getAttribute("focus")),TRUE)
             CALL display_clipboard_to_window()
 
          ON ACTION selectiontostring
@@ -237,31 +238,14 @@ DEFINE i,j, size, len INTEGER
       INPUT BY NAME cpfield01 ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
         ON ACTION comment_set
             PROMPT "Enter comment" For comment_value
-            CALL field_comment_set("cpfield01", comment_value)
+            CALL auitree.field_comment_set("cpfield01", comment_value)
         ON ACTION placeholder_set
             PROMPT "Enter placeholder" For placeholder_value
-            CALL field_placeholder_set("cpfield01", placeholder_value)
+            CALL auitree.field_placeholder_set("cpfield01", placeholder_value)
         ON ACTION get
-            CALL FGL_WINMESSAGE("Info",SFMT("Comment=%1, Placeholder=%2", field_comment_get("cpfield01"), field_placeholder_get("cpfield01")),"info")
+            CALL FGL_WINMESSAGE("Info",SFMT("Comment=%1, Placeholder=%2", auitree.field_comment_get("cpfield01"), auitree.field_placeholder_get("cpfield01")),"info")
       END INPUT
 
-      -- Action Text Set
-     
-      -- The button does not
-      ON ACTION actiontextset1 ATTRIBUTES(DEFAULTVIEW=YES)
-         -- Note how only the view in the action panel has its text set
-         CALL action_text_set("actiontextset1", CURRENT HOUR TO SECOND)
-         CALL button_text_set("actiontextset1", CURRENT HOUR TO SECOND)
-         
-      ON ACTION actiontextset2 ATTRIBUTES(DEFAULTVIEW=NO)
-         -- Note how only the view in the action panel has its text set
-         CALL button_text_set("actiontextset2", CURRENT HOUR TO SECOND)
-
-         
-      ON ACTION actiontextset3 ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Set3")
-         CALL action_text_set("actiontextset3", CURRENT HOUR TO SECOND)
-
-      
       ON ACTION close
          EXIT DIALOG
   
@@ -272,7 +256,7 @@ END MAIN
 
 
 
-FUNCTION auitree_generic_menu()
+FUNCTION generic_menu()
 DEFINE i INTEGER
 
    MENU "Generic Menu" ATTRIBUTES(STYLE="dialog", IMAGE="exclamation", COMMENT="Select generic menu action")
@@ -280,13 +264,13 @@ DEFINE i INTEGER
          FOR i = 1 TO 20
             IF i <= gmdesign.getLength() THEN
                CALL DIALOG.setActionHidden(SFMT("action%1", i USING "&&"),FALSE)
-               CALL action_text_set(SFMT("action%1", i USING "&&"),gmdesign[i].text)
-               CALL action_comment_set(SFMT("action%1", i USING "&&"),gmdesign[i].comment)
+               CALL DIALOG.setActionText(SFMT("action%1", i USING "&&"),gmdesign[i].text)
+               CALL DIALOG.setActionComment(SFMT("action%1", i USING "&&"),gmdesign[i].comment)
             ELSE
                -- Hide those actions that haven't been defined
                CALL DIALOG.setActionHidden(SFMT("action%1", i USING "&&"),TRUE)
-               CALL action_text_set(SFMT("action%1", i USING "&&"),"")
-               CALL action_comment_set(SFMT("action%1", i USING "&&"),"")
+               CALL DIALOG.setActionText(SFMT("action%1", i USING "&&"),"")
+               CALL DIALOG.setActionComment(SFMT("action%1", i USING "&&"),"")
             END IF
          END FOR
                        
@@ -325,9 +309,9 @@ DEFINE fieldname STRING
 DEFINE valid SMALLINT
 
    IF valid THEN
-      CALL field_style_remove(fieldname, "invalid")
+      CALL auitree.field_style_remove(fieldname, "invalid")
    ELSE
-      CALL field_style_add(fieldname, "invalid")
+      CALL auitree.field_style_add(fieldname, "invalid")
    END IF 
 
 END FUNCTION

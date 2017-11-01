@@ -157,7 +157,7 @@ END FUNCTION
 #+
 #+ @return col_map is now populated
 #+
-FUNCTION init_row_map(row_map, array_node, table_node)
+PRIVATE FUNCTION init_row_map(row_map, array_node, table_node)
 DEFINE row_map DYNAMIC ARRAY OF INTEGER
 TYPE sortType RECORD
    idx INTEGER,
@@ -286,7 +286,7 @@ END FUNCTION
 #+
 #+ @return col_map is now populated
 #+
-FUNCTION init_col_map(col_map, array_node, table_node)
+PRIVATE FUNCTION init_col_map(col_map, array_node, table_node)
 DEFINE col_map DYNAMIC ARRAY OF col_map_Type
 DEFINE array_node , record_node, table_node, table_column_node, table_column_widget_node om.DomNode
 DEFINE i,j INTEGER
@@ -361,7 +361,7 @@ END FUNCTION
 #+
 #+ @return simple_datatype string Either numeric, date, or string
 #+
-FUNCTION simplify_datatype(datatype)
+PRIVATE FUNCTION simplify_datatype(datatype)
 DEFINE datatype, simple_datatype STRING
    CASE
       WHEN datatype = "INTEGER" 

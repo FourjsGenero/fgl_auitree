@@ -118,38 +118,6 @@ END FUNCTION
 
 
 
-
-
-#+ action_comment_set Change the comment attribute of a given action
-FUNCTION action_comment_set(action, comment)
-DEFINE action, comment STRING
-DEFINE n om.DomNode
-
-    CALL ui.Dialog.getCurrent().setActionComment(action, comment)
-    -- Below code replaced by new setActionComment method
-    --LET n = action_node_get(action)
-    --IF n IS NOT NULL THEN
-         --CALL n.setAttribute("comment", comment)
-    --END IF
-END FUNCTION
-
-#+ action_text_set Change the text attribute of a given action
-FUNCTION action_text_set(action, text)
-DEFINE action, text STRING
-DEFINE n om.DomNode
-
-    CALL ui.Dialog.getCurrent().setActionText(action, text)
-    -- Below code replaced by new setActionText method
-    --LET n = action_node_get(action)
-    --IF n IS NOT NULL THEN
-        --CALL n.setAttribute("text", text)
-    --END IF
-END FUNCTION
-
-
-
-
-
 #+ field_format_set Change the format attribute of a given field
 FUNCTION field_format_set(name, format)
 DEFINE name, format STRING
@@ -304,29 +272,6 @@ DEFINE f ui.Form
 END FUNCTION
 
 
-
-#+ tablecolumn_title_set Set the title attribute of a given field
-FUNCTION tablecolumn_title_set(name, title)
-DEFINE name, title STRING
-DEFINE n om.DomNode
-
-    CALL ui.Window.getCurrent().getForm().setElementText(name, title)
-    -- Below code replaced by setElementText method
-    --LET n = field_node_get(name, FALSE)
-    --IF n IS NOT NULL THEN
-        --CALL n.setAttribute("text",title)
-    --END IF
-END FUNCTION
-
-
-
-#+ button_text_set Set the title attribute of a given field
-FUNCTION button_text_set(name, value)
-DEFINE name, value STRING
-
-
-    CALL ui.Window.getCurrent().getForm().setElementText(name, value)
-END FUNCTION
 
 #+ field_hidden_get Get the hidden attribute of a given field
 FUNCTION field_hidden_get(name)
