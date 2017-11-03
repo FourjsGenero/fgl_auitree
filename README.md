@@ -1,9 +1,7 @@
 # fgl_auitree
 Library functions that are useful to interrogate and manipulate the AUI Tree.
 
-The historial reasoning for this library was that the original versions of Genero 1.2, 1.3, a lot of the methods you see in ui.Dialog, ui.Form were not available.  If developers wanted to hide fields, change action text, they had to resort to what was called DOM Tree or AUI Tree manipulation techniques to actually change the values in the AUI Tree by manipulating the tree directory.  As Genero has progressed, a lot of methods have been added that save the Genero developer from having to do this.
-
-The library used to be a lot bigger and gets smaller with each release.  
+The historial reasoning for this library was that the original versions of Genero 1.2, 1.3 etc a lot of the methods you see in ui.Dialog, ui.Form were not available.  If developers wanted to hide fields, change action text etc, they had to resort to what was called DOM Tree or AUI Tree manipulation techniques to actually change the values in the AUI Tree.  As Genero has progressed, a lot of methods have been added to the ui.Dialog and ui.Form classes that save the Genero developer from having to create their own functions to do this.  What remains in this library are functions where an equivalent method does not exist in the Genero language yet.  This library used to be a lot bigger and gets smaller with each release, as you can see only a handful of functions remain.  
 
 The basic technique is to find a node in the AUI Tree and set or get the attribute value.
 
@@ -21,7 +19,7 @@ This example toggles the hidden status of various containers.  It reads the curr
 
 ### Determine Dialog Type
 
-Identify if currently in an INPUT or CONSTRUCT.  Useful for generic code that may have to behave differently depending where called from.  The screenshot shows output when in a CONSTRUCT in the MESSAGE panel
+Identify if currently in an INPUT or CONSTRUCT.  Useful for generic code that may have to behave differently depending upon where called from.  The screenshot shows output when in a CONSTRUCT in the MESSAGE panel
 
 <img alt="Dialog Type output" src="https://user-images.githubusercontent.com/13615993/32255548-9c2262d8-bf0d-11e7-9a5b-991999490f9a.png" width="50%" />
 
@@ -34,7 +32,7 @@ Use the TAG attribute to group a fields title label and description label so tha
 
 ### Array Copy
 
-Techniques for copying an Entire Array
+Techniques for copying an Entire Array.
 
 <img alt="Array Copy" src="https://user-images.githubusercontent.com/13615993/32255544-9abca6e2-bf0d-11e7-9785-894e575ecb02.png" width="50%" />
 
