@@ -117,13 +117,14 @@ END #PAGE
 PAGE readDialogType (TEXT="Read Dialog Type")
 GRID
 {
-Construct [dt01       ]
-Input     [dt02       ]
+Construct     [dt01       ] Click the ButtonEdit, should display Construct
+Input         [dt02       ] Click the ButtonEdit, should display Input
+Menu          [dt03       ] Click the Button, then click Test Button, should display Menu
+Display Array [dt04       ] Select the Display Array, then click Test in Action Panel, should display DisplayArray
+Input Array   [dt05       ] Select the Input Array, then click Test in Action Panel, should display InputArray
 [" "]
-Click the button and the code reads the dialog type so that we can respond 
-differently if in a CONSTRUCT or an INPUT. An example maybe in a zoom window 
-where you may allow multiple selection in a CONSTRUCT which you wouldn't in an 
-INPUT.
+Usage for this maybe in a zoom window  where you may allow multiple selection in 
+a CONSTRUCT which you wouldn't in an INPUT.
 }
 END
 END
@@ -219,6 +220,9 @@ LABEL td02 = formonly.tdesc02, TAG="tfield02";
 
 BUTTONEDIT dt01 = formonly.constructfield, ACTION=dialogType;
 BUTTONEDIT dt02 = formonly.inputfield, ACTION=dialogType;
+BUTTON dt03 : menu_test;
+EDIT dt04  = formonly.display_field;
+EDIT dt05  = formonly.input_field;
 
 ac01 = formonly.accode, TITLE="Code";
 ac02 = formonly.acdesc, TITLE="Description";
@@ -243,3 +247,5 @@ EDIT Z = formonly.dummy3, INVISIBLE, STYLE="dummy";
 
 INSTRUCTIONS
 SCREEN RECORD arrcopy(accode,acdesc,acactual,acbudget,acvariance, aclastuseddate, aclastusedtime, aclastuseddatetime);
+SCREEN RECORD dialogtype_display_scr(display_field);
+SCREEN RECORD dialogtype_input_scr(input_field);

@@ -290,51 +290,22 @@ DEFINE n om.DomNode
 END FUNCTION
 
 
-#+ dialogType_get(fieldname) Return the dialogType attribute of a given field
+#+ dialogType_get(fieldname) Return the dialogType attribute of current field
 FUNCTION dialogType_get()
-DEFINE dialogType STRING
-DEFINE w ui.Window
-DEFINE n,r om.DomNode
-DEFINE nl om.NodeList
- 
-   LET n = field_node_get(FGL_DIALOG_GETFIELDNAME(), FALSE)
-   IF n IS NOT NULL THEN
-      LET dialogType = n.getAttribute("dialogType")
-   ELSE  
-      LET w = ui.Window.getCurrent()
-      LET r= w.getnode()
-      LET nl = r.selectByPath("//DialogInfo")
-      IF nl.getlength() = 1 THEN
-         LET n = nl.item(1)
-         LET dialogType = n.getAttribute("dialogType")
-      END IF
-   END IF 
-   RETURN dialogType
-
-{ An alternative approach
-
-FUNCTION dialogType_get()
-
-DEFINE l_doc om.DomDocument
-DEFINE l_id INTEGER
 DEFINE l_field_node om.DomNode
 
-   # Finds the focus node and returns the dialog type attribute
-   LET l_doc = ui.Interface.getDocument()
-   LET l_id = ui.Interface.getRootNode().getAttribute("focus")
-   LET l_field_node = l_doc.getElementById(l_id)
+   LET l_field_node = ui.Interface.getDocument().getElementById(ui.Interface.getRootNode().getAttribute("focus"))
    CASE
        WHEN l_field_node.getTagName() = "MenuAction"
            RETURN "Menu"
-       WHEN  l_field_node IS NOT NULL THEN
+       WHEN  l_field_node IS NOT NULL 
            RETURN l_field_node.getAttribute("dialogType")
        OTHERWISE
            RETURN NULL
    END CASE
 END FUNCTION
-}
-   
-END FUNCTION
+
+
 
 #+ topmenuoption(filename STRING) Load a topmenu file and add to it our standard File,Edit, Help entries
 FUNCTION loadtopmenu_standard(filename)

@@ -71,6 +71,12 @@ DEFINE arrcopy DYNAMIC ARRAY OF RECORD
    aclastuseddatetime DATETIME YEAR TO SECOND
 END RECORD
 DEFINE i,j, size, len INTEGER
+DEFINE dialogtype_display_arr DYNAMIC ARRAY OF RECORD
+    display_field STRING
+END RECORD
+DEFINE dialogtype_input_arr DYNAMIC ARRAY OF RECORD
+    input_field STRING
+END RECORD
 
    OPTIONS FIELD ORDER FORM
    OPTIONS INPUT WRAP
@@ -98,6 +104,8 @@ DEFINE i,j, size, len INTEGER
       LET arrcopy[i].aclastusedtime = EXTEND(SFMT("%1:%2:%3",util.Math.rand(24),util.Math.rand(60),util.Math.rand(60)),HOUR TO SECOND)
       LET arrcopy[i].aclastuseddatetime = EXTEND(SFMT("%1-%2-%3 %4", YEAR(arrcopy[i].aclastuseddate), MONTH(arrcopy[i].aclastuseddate), DAY(arrcopy[i].aclastuseddate), arrcopy[i].aclastusedtime), YEAR TO SECOND)
    END FOR
+   LET dialogtype_display_arr[1].display_field = "Display Array Test"
+   LET dialogtype_input_arr[1].input_field = "Input Array Test"
    
 
    
@@ -163,7 +171,14 @@ DEFINE i,j, size, len INTEGER
          ON ACTION dialogtype
             MESSAGE auitree.dialogType_get()
       END INPUT
-      
+      DISPLAY ARRAY dialogtype_display_arr TO dialogtype_display_scr.*
+        ON ACTION dialogtype  ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Test")
+            MESSAGE auitree.dialogType_get()
+      END DISPLAY
+      INPUT ARRAY dialogtype_input_arr FROM dialogtype_input_scr.*  ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+        ON ACTION dialogtype  ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Test")
+            MESSAGE auitree.dialogType_get()
+      END INPUT
       -- Use the tag attribute to show/hide more than one screen widget at a 
       -- time.
       INPUT tcode01, tdesc01, tcode02, tdesc02, dummy3  FROM tcode01, tdesc01, tcode02, tdesc02, dummy3 ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
@@ -221,6 +236,14 @@ DEFINE i,j, size, len INTEGER
         ON ACTION get
             CALL FGL_WINMESSAGE("Info",SFMT("Comment=%1, Placeholder=%2", auitree.field_comment_get("cpfield01"), auitree.field_placeholder_get("cpfield01")),"info")
       END INPUT
+
+      ON ACTION menu_test ATTRIBUTES(TEXT="Menu Test")
+        MENU ""
+            ON ACTION dialogtype ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Test")
+                MESSAGE auitree.dialogType_get()
+            ON ACTION exit ATTRIBUTES(TEXT="Exit")
+                EXIT MENU
+        END MENU
 
       ON ACTION close
          EXIT DIALOG
