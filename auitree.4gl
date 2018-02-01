@@ -310,6 +310,30 @@ DEFINE nl om.NodeList
       END IF
    END IF 
    RETURN dialogType
+
+{ An alternative approach
+
+FUNCTION dialogType_get()
+
+DEFINE l_doc om.DomDocument
+DEFINE l_id INTEGER
+DEFINE l_field_node om.DomNode
+
+   # Finds the focus node and returns the dialog type attribute
+   LET l_doc = ui.Interface.getDocument()
+   LET l_id = ui.Interface.getRootNode().getAttribute("focus")
+   LET l_field_node = l_doc.getElementById(l_id)
+   CASE
+       WHEN l_field_node.getTagName() = "MenuAction"
+           RETURN "Menu"
+       WHEN  l_field_node IS NOT NULL THEN
+           RETURN l_field_node.getAttribute("dialogType")
+       OTHERWISE
+           RETURN NULL
+   END CASE
+END FUNCTION
+}
+   
 END FUNCTION
 
 #+ topmenuoption(filename STRING) Load a topmenu file and add to it our standard File,Edit, Help entries
