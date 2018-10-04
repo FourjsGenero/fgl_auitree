@@ -54,12 +54,12 @@ Change comment, placeholder value at runtime.  SCreenshot shows placeholder adde
 
 ### TopMenu Builder
 
-Add standard items to each TopMenu, in this case a File, Edit on the left and Help on the right.  Screensho shows Topmenu with File, Edit on left, Help on right
+Add standard items to each TopMenu, in this case a File, Edit on the left and Help on the right.  Screenshot shows Topmenu with File, Edit on left, Help on right
 
 <img alt="TopMenu Example" src="https://user-images.githubusercontent.com/13615993/32255539-98f6cdce-bf0d-11e7-8021-b1a51687ed99.png" width="50%" />
 
 
 
 ## TODO
-Port off arraycopy as a seperate example
+Port off arraycopy as a separate example
 
