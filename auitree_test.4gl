@@ -115,6 +115,9 @@ END RECORD
    LET r = d.getdocumentelement()
    LET w = ui.Window.getCurrent()
    LET f= w.getForm()
+
+   CALL field_width_set("accode",3)
+   CALL field_width_set("acdesc",15)
    
    CALL auitree.loadtopmenu_standard("auitree_test")
    

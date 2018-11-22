@@ -100,7 +100,7 @@ FUNCTION field_tag_set(tag, attribute, child, value)
 DEFINE tag, attribute, value STRING
 DEFINE child SMALLINT
 DEFINE i INTEGER
-DEFINE n om.DomNode
+DEFINE n, p om.DomNode
 DEFINE nl om.NodeList
 DEFINE w ui.Window
 
@@ -109,6 +109,14 @@ DEFINE w ui.Window
    LET nl = n.selectByPath(SFMT("//*[@tag=\"%1\"]",tag))
    FOR i = 1 TO nl.getlength()
       LET n = nl.item(i)
+      -- Test if we have child of FormField, Matrix, TableColumn
+      -- If we have then we have found the child node, and we really want the parent node
+      LET p = n.getParent()
+      IF p.getTagName() = "FormField"
+      OR p.getTagName() = "TableColumn"
+      OR p.getTagName() = "Matrix" THEN 
+         LET n = p
+      END IF
       IF child THEN
          LET n = n.getfirstchild()
       END IF
