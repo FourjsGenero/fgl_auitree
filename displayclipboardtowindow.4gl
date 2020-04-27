@@ -12,7 +12,7 @@ DEFINE sb base.StringBuffer
     CALL sb.replace(ASCII(9),"</td><td>", 0)
     CALL sb.replace(ASCII(10),"</td></tr><tr><td>", 0)
     
-    OPEN WINDOW w WITH FORM "displayclipboardtowindow"
+    OPEN WINDOW w WITH FORM "displayclipboardtowindow"  ATTRIBUTES(TEXT="Select and Copy", STYLE="modal")
     INPUT s FROM clipboard ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
     LET int_flag = 0
     CLOSE WINDOW w
@@ -31,7 +31,7 @@ DEFINE s STRING
     CALL d.setSelectionRange(name,1,-1,1)
     LET s = d.selectionToString(name)
     
-    OPEN WINDOW w WITH FORM "displayclipboardtowindow" ATTRIBUTES(TEXT="Select and Copy")
+    OPEN WINDOW w WITH FORM "displayclipboardtowindow" ATTRIBUTES(TEXT="Select and Copy", STYLE="modal")
     INPUT s FROM clipboard ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
     LET int_flag = 0
     CLOSE WINDOW w
