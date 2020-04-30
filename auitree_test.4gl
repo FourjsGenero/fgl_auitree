@@ -77,6 +77,7 @@ END RECORD
 DEFINE dialogtype_input_arr DYNAMIC ARRAY OF RECORD
     input_field STRING
 END RECORD
+DEFINE styleattribute_value STRING
 
    OPTIONS FIELD ORDER FORM
    OPTIONS INPUT WRAP
@@ -247,6 +248,32 @@ END RECORD
             ON ACTION exit ATTRIBUTES(TEXT="Exit")
                 EXIT MENU
         END MENU
+
+        ON ACTION stylereader_window_normal 
+           OPEN WINDOW dc WITH FORM "displayclipboardtowindow" ATTRIBUTES(TEXT="Test windowType Style Attibute")
+            MENU ""
+                ON ACTION test
+                    LET styleattribute_value = auitree.windowtype_get()
+                    CALL FGL_WINMESSAGE("Info",SFMT("windowType=%1",styleattribute_value),"info")
+                    EXIT MENU
+                ON ACTION close
+                    EXIT MENU
+            END MENU
+            CLOSE WINDOW dc
+
+        ON ACTION stylereader_window_dialog 
+            OPEN WINDOW dc WITH FORM "displayclipboardtowindow"  ATTRIBUTES(TEXT="Test windowType Style Attibute", STYLE="dialog")
+            MENU ""
+                ON ACTION test
+                    LET styleattribute_value = auitree.windowtype_get()
+                    CALL FGL_WINMESSAGE("Info",SFMT("windowType=%1",styleattribute_value),"info")
+                    EXIT MENU
+                ON ACTION close
+                    EXIT MENU
+            END MENU
+            CLOSE WINDOW dc
+
+        
 
       ON ACTION close
          EXIT DIALOG

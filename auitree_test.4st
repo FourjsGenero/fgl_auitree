@@ -41,6 +41,9 @@
    <Style name="Window.common" >
       <StyleAttribute name = "forceDefaultSettings" value = "1" />
    </Style>
+    <Style name="Window.dialog" >
+      <StyleAttribute name = "windowType" value = "modal" />
+   </Style>
    
    <Style name=":query" >
       <StyleAttribute name = "backgroundColor" value = "yellow" />

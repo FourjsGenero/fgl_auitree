@@ -42,8 +42,7 @@
 #+             Genero equivalent 
 
 #+ action_node_get Return the node that defines a given action
-FUNCTION action_node_get(name)
-DEFINE name STRING
+FUNCTION action_node_get(name STRING) RETURNS om.DomNode
 DEFINE w ui.Window
 DEFINE n,f om.DomNode
 DEFINE nl om.nodeList
@@ -62,9 +61,7 @@ END FUNCTION
 
 
 #+ field_node_get Return the node that defines a given field.
-FUNCTION field_node_get(name, child)
-DEFINE name STRING
-DEFINE child SMALLINT
+FUNCTION field_node_get(name STRING, child SMALLINT) RETURNS om.DomNode
 DEFINE w ui.Window
 DEFINE n,f om.DomNode
 DEFINE nl om.nodeList
@@ -96,9 +93,7 @@ END FUNCTION
 
 
 #+ field_tag_set Change the attribute of a list of fields that have been given the same tag value
-FUNCTION field_tag_set(tag, attribute, child, value)
-DEFINE tag, attribute, value STRING
-DEFINE child SMALLINT
+FUNCTION field_tag_set(tag STRING, attribute STRING, child INTEGER, value STRING) RETURNS ()
 DEFINE i INTEGER
 DEFINE n, p om.DomNode
 DEFINE nl om.NodeList
@@ -127,8 +122,7 @@ END FUNCTION
 
 
 #+ field_format_set Change the format attribute of a given field
-FUNCTION field_format_set(name, format)
-DEFINE name, format STRING
+FUNCTION field_format_set(name STRING, format STRING) RETURNS ()
 DEFINE n om.DomNode
 
    LET n = field_node_get(name, TRUE)
@@ -142,8 +136,7 @@ END FUNCTION
 
 
 #+ field_justify_set Set the justify attribute of a given field
-FUNCTION field_justify_set(name, justify)
-DEFINE name, justify STRING
+FUNCTION field_justify_set(name STRING, justify STRING) RETURNS ()
 DEFINE n om.DomNode
 
    LET n = field_node_get(name, TRUE)
@@ -154,9 +147,7 @@ END FUNCTION
 
 
 #+ field_width_set Set the width attribute of a given field
-FUNCTION field_width_set(name, width)
-DEFINE name STRING
-DEFINE width INTEGER
+FUNCTION field_width_set(name STRING, width INTEGER) RETURNS ()
 DEFINE n om.DomNode
 
    LET n = field_node_get(name, TRUE)
@@ -168,9 +159,7 @@ END FUNCTION
 
 
 #+ field_comment_set Set the comment attribute of a given field
-FUNCTION field_comment_set(name, comment)
-DEFINE name STRING
-DEFINE comment STRING
+FUNCTION field_comment_set(name STRING, comment STRING) RETURNS ()
 DEFINE n om.DomNode
 
    LET n = field_node_get(name, TRUE)
@@ -182,8 +171,7 @@ END FUNCTION
 
 
 #+ field_comment_get Get the hidden attribute of a given field
-FUNCTION field_comment_get(name)
-DEFINE name STRING
+FUNCTION field_comment_get(name STRING) RETURNS STRING
 DEFINE comment STRING
 DEFINE n om.DomNode
 
@@ -198,9 +186,7 @@ END FUNCTION
 
 
 #+ field_placeholdert_set Set the placeholder attribute of a given field
-FUNCTION field_placeholder_set(name, placeholder)
-DEFINE name STRING
-DEFINE placeholder STRING
+FUNCTION field_placeholder_set(name STRING, placeholder STRING) RETURNS ()
 DEFINE n om.DomNode
 
    LET n = field_node_get(name, TRUE)
@@ -212,8 +198,7 @@ END FUNCTION
 
 
 #+ field_placeholder_get Get the hidden attribute of a given field
-FUNCTION field_placeholder_get(name)
-DEFINE name STRING
+FUNCTION field_placeholder_get(name STRING) RETURNS STRING
 DEFINE placeholder STRING
 DEFINE n om.DomNode
 
@@ -228,9 +213,8 @@ END FUNCTION
 
 
 #+ field_style_add Add a style to a space delimited list of styles
-FUNCTION field_style_add(name, style)
-DEFINE name STRING
-DEFINE style STRING, styletest STRING
+FUNCTION field_style_add(name STRING, style STRING)
+DEFINE styletest STRING
 DEFINE n om.DomNode
 DEFINE value STRING
 DEFINE w ui.Window
@@ -254,9 +238,8 @@ END FUNCTION
 
 
 #+ field_style_remove Remove a style from a space delimited list of styles
-FUNCTION field_style_remove(name, style)
-DEFINE name STRING
-DEFINE style STRING, styletest STRING
+FUNCTION field_style_remove(name STRING, style STRING) RETURNS ()
+DEFINE styletest STRING
 DEFINE n om.DomNode
 DEFINE pos INTEGER
 DEFINE value STRING
@@ -282,8 +265,7 @@ END FUNCTION
 
 
 #+ field_hidden_get Get the hidden attribute of a given field
-FUNCTION field_hidden_get(name)
-DEFINE name STRING
+FUNCTION field_hidden_get(name STRING) RETURNS INTEGER
 DEFINE hidden INTEGER
 DEFINE n om.DomNode
 
@@ -299,7 +281,7 @@ END FUNCTION
 
 
 #+ dialogType_get(fieldname) Return the dialogType attribute of current field
-FUNCTION dialogType_get()
+FUNCTION dialogType_get() RETURNS STRING
 DEFINE l_field_node om.DomNode
 
    LET l_field_node = ui.Interface.getDocument().getElementById(ui.Interface.getRootNode().getAttribute("focus"))
@@ -316,8 +298,7 @@ END FUNCTION
 
 
 #+ topmenuoption(filename STRING) Load a topmenu file and add to it our standard File,Edit, Help entries
-FUNCTION loadtopmenu_standard(filename)
-DEFINE filename STRING
+FUNCTION loadtopmenu_standard(filename STRING)
 DEFINE w ui.Window
 DEFINE f ui.Form
 DEFINE doc om.DomDocument
@@ -384,4 +365,64 @@ DEFINE tmg, tmc om.DomNode
          EXIT FOR         
       END IF
    END FOR
+END FUNCTION
+
+
+
+FUNCTION windowType_get() RETURNS STRING
+DEFINE w ui.Window
+DEFINE wn om.DomNode
+DEFINE ws STRING
+
+    -- Look up window style, then get entry from StyleList
+    LET w = ui.Window.getCurrent()
+    LET wn = w.getNode()
+    LET ws = wn.getAttribute("style")
+    RETURN nvl(styleattribute_get("Window", ws, NULL, "windowType"), "normal")
+   
+END FUNCTION
+
+
+-- This has not been thoroghly tested
+FUNCTION styleattribute_get(element STRING, style STRING, pseudo STRING, attribute STRING)
+DEFINE stylelist_node, style_node, attribute_node om.DomNode
+DEFINE stylelist_list, style_list, attribute_list om.NodeList
+DEFINE i, j INTEGER
+DEFINE xpath STRING
+
+    LET stylelist_list = ui.Interface.getRootNode().selectByTagName("StyleList")
+    IF stylelist_list.getLength() = 1 THEN
+        -- GOOD, a style has been loaded
+        LET stylelist_node = stylelist_list.item(1)
+    ELSE
+        -- Something has gone wrong, or there is no style, get out of there.  Should we error if > 1
+        -- Calling function should handle default case for nothing returned
+        RETURN NULL
+    END IF
+
+    -- Precedence from http://4js.com/online_documentation/fjs-fgl-manual-html/#fgl-topics/c_fgl_presentation_styles_precedence.html
+    FOR i = 1 TO 8
+        CASE i 
+            WHEN 1 LET xpath = SFMT("//Style[@name=\"%1.%2:%3\"]",element, style, pseudo)
+            WHEN 2 LET xpath = SFMT("//Style[@name=\".%2:%3\"]",element, style, pseudo)
+            WHEN 3 LET xpath = SFMT("//Style[@name=\"%1.%2\"]",element, style, pseudo)
+            WHEN 4 LET xpath = SFMT("//Style[@name=\"%1:%3\"]",element, style, pseudo)
+            WHEN 5 LET xpath = SFMT("//Style[@name=\":%3\"]",element, style, pseudo)
+            WHEN 6 LET xpath = SFMT("//Style[@name=\".%2\"]",element, style, pseudo)
+            WHEN 7 LET xpath = SFMT("//Style[@name=\"%1\"]",element, style, pseudo)
+            WHEN 8 LET xpath = "//Style[@name=\"*\"]"
+        END CASE
+        LET style_list = stylelist_node.selectByPath(xpath)
+        FOR j = 1 TO style_list.getLength()
+            LET style_node = style_list.item(j)
+            LET xpath =  SFMT("//StyleAttribute[@name=\"%1\"]",attribute)
+            LET attribute_list = style_node.selectByPath(xpath)
+            IF attribute_list.getLength() = 1 THEN
+                LET attribute_node = attribute_list.item(1)
+                RETURN attribute_node.getAttribute("value")
+            END IF
+        END FOR
+    END FOR
+    RETURN NULL
+
 END FUNCTION

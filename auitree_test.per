@@ -204,7 +204,15 @@ entries into topmenu_loadstandard() rather than having to repeat the definition
 for File,Edit, Help in every single .4tm file.
 }
 END 
+END
 
+PAGE stylereader (TEXT="Style Reader")
+GRID
+{
+Normal window [bsr01   ]
+Dialog window [bsr02   ]
+}
+END
 END
 
 END
@@ -244,6 +252,9 @@ EDIT cp01 = formonly.cpfield01;
 EDIT X = formonly.dummy, INVISIBLE, STYLE="dummy";
 EDIT Y = formonly.dummy2, INVISIBLE, STYLE="dummy";
 EDIT Z = formonly.dummy3, INVISIBLE, STYLE="dummy";
+
+BUTTON bsr01 : stylereader_window_normal, TEXT="Normal window";
+BUTTON bsr02 : stylereader_window_dialog, TEXT="Dialog window";
 
 INSTRUCTIONS
 SCREEN RECORD arrcopy(accode,acdesc,acactual,acbudget,acvariance, aclastuseddate, aclastusedtime, aclastuseddatetime);
