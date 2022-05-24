@@ -39,7 +39,7 @@ ACTION actiontextset2 (TEXT="Set2")
 END
 
 LAYOUT (TEXT="AUI Tree Menu example")
-FOLDER
+FOLDER auitree_test #(STYLE="accordion")
 
 PAGE home (TEXT="Welcome", ACTION=home)
 GRID
@@ -123,8 +123,7 @@ Menu          [dt03       ] Click the Button, then click Test Button, should dis
 Display Array [dt04       ] Select the Display Array, then click Test in Action Panel, should display DisplayArray
 Input Array   [dt05       ] Select the Input Array, then click Test in Action Panel, should display InputArray
 [" "]
-Usage for this maybe in a zoom window  where you may allow multiple selection in 
-a CONSTRUCT which you wouldn't in an INPUT.
+Usage for this maybe in a zoom window where you may allow multiple selection in a CONSTRUCT which you wouldn't in an INPUT.
 }
 END
 END
@@ -215,8 +214,77 @@ Dialog window [bsr02   ]
 END
 END
 
+PAGE testrg (TEXT="RadioGroup")
+HBOX
+GRID
+{
+[rg00]
+}
+END #GRID
+VBOX
+GRID
+{
+[rgp ]
+}
 END
-END
+TABLE
+{
+[rg01      |rg02       ]
+}
+END #TABLE
+END #VBNX
+END #HBOX
+END #PAGE
+
+PAGE currentfolderpage (TEXT="Current Folder Page")
+VBOX
+GRID
+{
+This example shows the conundrum for folder pages and determining what page is 
+on top.  The conundrum exists because the Folder node in the AUI Tree does not
+keep track on what the current page is.
+[" "]
+This method uses ON ACTION on each page to keep track of current folder page 
+when there is no focusable element on the page
+[bfp01         ]
+[" "]
+This method will look at the field with focus and tell you what folder page the 
+field with focus is on
+[bfp02         ]
+}
+END #GRID
+FOLDER currentfolderpage
+PAGE testpageone (ACTION=testpageone, TEXT="Test Page One")
+GRID
+{
+Test Page One
+}
+END #GRID
+END #PAGE
+PAGE testpagetwo (ACTION=testpagetwo, TEXT="Test Page Two")
+GRID
+{
+Test Page Two
+}
+END #GRID
+END #PAGE
+PAGE testpagethree (ACTION=testpagethree, TEXT="Test Page Three")
+GRID
+{
+Test Page Three
+}
+END #GRID
+END #PAGE
+
+
+
+END #FOLDER
+
+END #VBOX
+END #PAGE
+
+END # FOLDER 
+END # PAGE
 ATTRIBUTES
 
 LABEL tl01: TEXT="Field 01", TAG="tfield01";
@@ -256,7 +324,18 @@ EDIT Z = formonly.dummy3, INVISIBLE, STYLE="dummy";
 BUTTON bsr01 : stylereader_window_normal, TEXT="Normal window";
 BUTTON bsr02 : stylereader_window_dialog, TEXT="Dialog window";
 
+BUTTON bfp01: current_folderpage_test, TEXT="Current Test Folder Page";
+BUTTON bfp02: current_folderpage_toplevel, TEXT="Current TopLevel Folder Page";
+
+EDIT rg01 = formonly.rg_name;
+EDIT rg02 = formonly.rg_text;
+BUTTON rgp: rg_populate, TEXT="Populate";
+RADIOGROUP rg00 = formonly.rg_test;
+
+
 INSTRUCTIONS
 SCREEN RECORD arrcopy(accode,acdesc,acactual,acbudget,acvariance, aclastuseddate, aclastusedtime, aclastuseddatetime);
 SCREEN RECORD dialogtype_display_scr(display_field);
 SCREEN RECORD dialogtype_input_scr(input_field);
+
+SCREEN RECORD rg_scr(rg_name, rg_text)

@@ -44,6 +44,10 @@
     <Style name="Window.dialog" >
       <StyleAttribute name = "windowType" value = "modal" />
    </Style>
+
+   <Style name="Folder.accordion">
+      <StyleAttribute name="position" value="accordion" />
+   </Style>
    
    <Style name=":query" >
       <StyleAttribute name = "backgroundColor" value = "yellow" />

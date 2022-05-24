@@ -38,6 +38,11 @@ DEFINE topmenugroup STRING
 DEFINE topmenuarray DYNAMIC ARRAY OF RECORD
    topmenucommand, topmenuaction STRING
 END RECORD
+DEFINE rg_test STRING
+DEFINE rg_arr DYNAMIC ARRAY OF RECORD
+    rg_name STRING, 
+    rg_text STRING
+END RECORD
    
 MAIN
 
@@ -78,6 +83,9 @@ DEFINE dialogtype_input_arr DYNAMIC ARRAY OF RECORD
     input_field STRING
 END RECORD
 DEFINE styleattribute_value STRING
+DEFINE current_page_variable, current_page_focus STRING
+
+
 
    OPTIONS FIELD ORDER FORM
    OPTIONS INPUT WRAP
@@ -107,6 +115,11 @@ DEFINE styleattribute_value STRING
    END FOR
    LET dialogtype_display_arr[1].display_field = "Display Array Test"
    LET dialogtype_input_arr[1].input_field = "Input Array Test"
+
+   LET rg_arr[1].rg_name = "Y"
+   LET rg_arr[1].rg_text = "Yes"
+   LET rg_arr[2].rg_name = "N"
+   LET rg_arr[2].rg_text = "No"
    
 
    
@@ -121,6 +134,9 @@ DEFINE styleattribute_value STRING
    CALL field_width_set("acdesc",15)
    
    CALL auitree.loadtopmenu_standard("auitree_test")
+
+   CALl rg_populate()
+   LET current_page_variable = "testpageone"
    
    DIALOG ATTRIBUTES(UNBUFFERED)
       -- First folder page
@@ -241,6 +257,14 @@ DEFINE styleattribute_value STRING
             CALL FGL_WINMESSAGE("Info",SFMT("Comment=%1, Placeholder=%2", auitree.field_comment_get("cpfield01"), auitree.field_placeholder_get("cpfield01")),"info")
       END INPUT
 
+      INPUT BY NAME rg_test ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+        
+      END INPUT
+      INPUT ARRAY rg_arr FROM rg_scr.* ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
+        ON ACTION rg_populate
+            CALL rg_populate()
+      END INPUT
+
       ON ACTION menu_test ATTRIBUTES(TEXT="Menu Test")
         MENU ""
             ON ACTION dialogtype ATTRIBUTES(DEFAULTVIEW=YES, TEXT="Test")
@@ -273,6 +297,21 @@ DEFINE styleattribute_value STRING
             END MENU
             CLOSE WINDOW dc
 
+        ON ACTION testpageone
+            LET current_page_variable = "testpageone"
+            
+        ON ACTION testpagetwo
+            LET current_page_variable = "testpagetwo"
+
+        ON ACTION testpagethree
+            LET current_page_variable = "testpagethree"
+
+        ON ACTION current_folderpage_test
+            CALL FGL_WINMESSAGE("Info",SFMT("Current Test Folder Page is %1", current_page_variable),"info")
+
+        ON ACTION current_folderpage_toplevel
+   #         LET current_page_focus = auitree.current_page_from_focus_get("auitree_test")
+            CALL FGL_WINMESSAGE("Info",SFMT("Current TopLevel Folder Page is %1", current_page_focus),"info")
         
 
       ON ACTION close
@@ -315,4 +354,18 @@ DEFINE value INTEGER
       RETURN FALSE
    END IF
    RETURN TRUE
+END FUNCTION
+
+
+FUNCTION rg_populate()
+DEFINE rg auitree.ui_RadioGroup
+DEFINE i INTEGER
+
+   LET rg = auitree.ui_RadioGroup_forName("formonly.rg_test")
+   CALL auitree.ui_RadioGroup_clear(rg)
+   FOR i = 1 TO rg_arr.getLength()
+        CALL auitree.ui_RadioGroup_addItem(rg, rg_arr[i].rg_name, rg_arr[i].rg_text)
+   END FOR
+   
+
 END FUNCTION

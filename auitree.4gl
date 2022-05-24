@@ -426,3 +426,68 @@ DEFINE xpath STRING
     RETURN NULL
 
 END FUNCTION
+
+
+-- These could possibly be in a separate ui_radigroup module
+
+PUBLIC TYPE ui_RadioGroup om.DomNode
+
+#! Returns the om.DomNode corresponding to a RadioGroup field
+FUNCTION ui_RadioGroup_forName(name STRING) RETURNS ui_RadioGroup
+DEFINE rg ui_RadioGroup
+
+DEFINE w ui.Window
+
+    -- Find the Form Field node with the specified fieldname
+    LET w = ui.Window.getCurrent()
+    LET rg = w.findNode("FormField", name)
+    IF rg IS NOT NULL THEN
+        -- If FormField found, the first child will the widget node
+        LET rg = rg.getFirstChild()
+        -- Check that it is a RadioGroup, otherwise return null
+        IF rg.getTagName() != "RadioGroup" THEN
+            INITIALIZE rg TO NULL
+        END IF
+    END IF
+    RETURN rg
+END FUNCTION
+
+
+#! Clear the child nodes of a RadioGroup node
+FUNCTION ui_RadioGroup_clear(rg ui_RadioGroup)
+
+    -- Check that we are starting with a RadioGroup node
+    IF rg.getTagName() != "RadioGroup" THEN
+        -- Should throw an exception here
+        RETURN
+    END IF
+    
+    -- Remove all the child node, starting at the last one
+    -- and working forwards
+    VAR i INTEGER
+    FOR i = rg.getChildCount() TO 1 STEP -1
+        CALL rg.removeChild(rg.getChildByIndex(i))
+    END FOR
+END FUNCTION
+
+
+
+FUNCTION ui_RadioGroup_addItem(rg ui_RadioGroup, name STRING, text STRING)
+DEFINE child om.DomNode
+
+    -- Check that we are starting with a RadioGroup node
+    IF rg.getTagName() != "RadioGroup" THEN
+        -- Should throw an exception here
+        RETURN
+    END IF
+
+    -- Add a new node of type Item
+    LET child = rg.createChild("Item")
+
+    -- Set the name and text attribute values
+    CALL child.setAttribute("name", name)
+    CALL child.setAttribute("text", text)
+END FUNCTION
+
+
+
