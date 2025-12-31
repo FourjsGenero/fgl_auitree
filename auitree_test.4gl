@@ -137,10 +137,11 @@ DEFINE current_page_variable, current_page_focus STRING
 
    CALl rg_populate()
    LET current_page_variable = "testpageone"
+
    
    DIALOG ATTRIBUTES(UNBUFFERED)
       -- First folder page
-      INPUT dummy FROM dummy 
+      INPUT dummy FROM dummy
       END INPUT
        
       -- Toggle the hidden attribute of the containers
@@ -263,6 +264,10 @@ DEFINE current_page_variable, current_page_focus STRING
       INPUT ARRAY rg_arr FROM rg_scr.* ATTRIBUTES(WITHOUT DEFAULTS=TRUE)
         ON ACTION rg_populate
             CALL rg_populate()
+
+        -- Added this to test GBC-5050
+        ON ACTION rg_change_current
+            CALL auitree.ui_RadioGroup_changeItemTextByIndex(auitree.ui_RadioGroup_forName("formonly.rg_test"), ui.Dialog.getCurrent().getCurrentRow("rg_scr"), rg_arr[ui.Dialog.getCurrent().getCurrentRow("rg_scr")].rg_text)
       END INPUT
 
       ON ACTION menu_test ATTRIBUTES(TEXT="Menu Test")
@@ -369,3 +374,4 @@ DEFINE i INTEGER
    
 
 END FUNCTION
+

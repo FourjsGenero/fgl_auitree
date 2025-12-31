@@ -42,6 +42,9 @@
 #+             Genero equivalent 
 
 #+ action_node_get Return the node that defines a given action
+
+PUBLIC TYPE ui_RadioGroup om.DomNode
+
 FUNCTION action_node_get(name STRING) RETURNS om.DomNode
 DEFINE w ui.Window
 DEFINE n,f om.DomNode
@@ -430,7 +433,7 @@ END FUNCTION
 
 -- These could possibly be in a separate ui_radigroup module
 
-PUBLIC TYPE ui_RadioGroup om.DomNode
+
 
 #! Returns the om.DomNode corresponding to a RadioGroup field
 FUNCTION ui_RadioGroup_forName(name STRING) RETURNS ui_RadioGroup
@@ -455,7 +458,7 @@ END FUNCTION
 
 #! Clear the child nodes of a RadioGroup node
 FUNCTION ui_RadioGroup_clear(rg ui_RadioGroup)
-
+DEFINE i INTEGER
     -- Check that we are starting with a RadioGroup node
     IF rg.getTagName() != "RadioGroup" THEN
         -- Should throw an exception here
@@ -464,7 +467,6 @@ FUNCTION ui_RadioGroup_clear(rg ui_RadioGroup)
     
     -- Remove all the child node, starting at the last one
     -- and working forwards
-    VAR i INTEGER
     FOR i = rg.getChildCount() TO 1 STEP -1
         CALL rg.removeChild(rg.getChildByIndex(i))
     END FOR
@@ -487,6 +489,25 @@ DEFINE child om.DomNode
     -- Set the name and text attribute values
     CALL child.setAttribute("name", name)
     CALL child.setAttribute("text", text)
+END FUNCTION
+
+FUNCTION ui_RadioGroup_changeItemTextByIndex(rg ui_RadioGroup, idx INTEGER, text STRING)
+DEFINE  child  om.DomNode
+DEFINE dummy om.DomNode
+
+    -- Check that we are starting with a RadioGroup node
+    IF rg.getTagName() != "RadioGroup" THEN
+        -- Should throw an exception here
+        RETURN
+    END IF
+    
+    LET child = rg.getChildByIndex(idx)
+    CALL child.setAttribute("text", TEXT)
+
+    -- Should not need to force a dummy change in the item list
+    #LET dummy = rg.createChild("Item")
+    #CALL ui.Interface.Refresh()
+    #CALL rg.removeChild(dummy)
 END FUNCTION
 
 
